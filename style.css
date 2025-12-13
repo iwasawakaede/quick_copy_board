@@ -1,8 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c');
 #test {
   color: gray;
 }
 * {
   outline: solid 1px red;
+}
+body {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+  }
+h1 {
+  color: #fff;
+  background-color: #07575B;
 }
 .spaceS {
   margin: 10px 0 0;
