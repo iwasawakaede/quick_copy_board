@@ -1,0 +1,35 @@
+#test {
+  color: gray;
+}
+* {
+  outline: solid 1px red;
+}
+input {
+  width: 200px;
+  height: 3em;
+}
+.list {
+  width: 200px;
+}
+#container {
+  line-height: 1.5;
+  display: flex;
+  flex-wrap: wrap;
+}
+.box {
+  width: 350px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+.inputBox {
+  width: 350px;
+  display: flex;
+  align-items: center;
+}
+.btnSize {
+  text-align: center;
+  width: 50px;
+  display: block;
+}
