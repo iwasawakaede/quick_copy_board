@@ -32,7 +32,10 @@ function wordSeach(e) {
   console.log(resultObjects);
   const result = resultObjects.map(item => item.text);
   console.log(result);
-  alert('一致するのは' + result + 'です。');
+  textOpen(resultObjects);
+
+  //検索クリア
+  filterBox.value = '';
  }
 
 //保存ボタン
@@ -45,7 +48,7 @@ function saveClick(){
   }
   saveStorage();
   contenerBox.innerHTML = '';
-  textOpen();
+  textOpen(textArr);
 }
 
 //ローカルストレージ
@@ -74,11 +77,11 @@ function saveStorage(){
 }
 
 //保存したテキストを表示
-function textOpen(){
+function textOpen(arr){
   contenerBox.innerHTML = '';
   j = 1;
-  for(let i=0; i<textArr.length; i++){
-   const snippet = textArr[i];
+  for(let i=0; i<arr.length; i++){
+   const snippet = arr[i];
 
    let listBox = document.createElement('div');
    listBox.classList.add('box');
@@ -172,7 +175,7 @@ function updateClick(index, text){
   textOpen();
 }
 
-init();
+init(textArr);
 
 //検索
 //カテゴリー分け
