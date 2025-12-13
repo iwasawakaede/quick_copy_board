@@ -2,11 +2,14 @@
 const textBox = document.getElementById('text');
 const save = document.getElementById('click');
 const contenerBox = document.getElementById('container');
+const filterBox = document.getElementById('hit');
+const searchBtn = document.getElementById('search');
 
 let textArr = [];
 let cnt = 0;
 let clickFlg = false;
 let date2 = '';
+let inputWord = '';
 
 //初期化
 function init(){
@@ -15,9 +18,25 @@ function init(){
   textOpen(textArr);
 }
 
+//検索ボタン
+searchBtn.addEventListener('click', wordSeach, false);
+//検索ボタン押下
+function wordSeach(e) {
+  //ページリロード中止
+  event.preventDefault();
+  inputWord = filterBox.value;
+  //配列内を検索する
+  //filter->検索した値を配列のオブジェクトで返す
+  //map->返されたオブジェクトをtextのキーのみの配列に直す
+  const resultObjects = textArr.filter(item => item.text.includes(inputWord));
+  console.log(resultObjects);
+  const result = resultObjects.map(item => item.text);
+  console.log(result);
+  alert('一致するのは' + result + 'です。');
+ }
+
 //保存ボタン
 save.addEventListener('click', saveClick, false);
-
 //保存ボタン押下
 function saveClick(){
   if (textBox.value.trim() ===
@@ -65,7 +84,7 @@ function textOpen(){
    listBox.classList.add('box');
    const strElement =  document.createElement('div');
    strElement.innerHTML = '<span id="nm">' + j + ': </span>'+ snippet.text;
-   strElement.classList.add('list');
+   strElement.classList.add('list', 'spaceS');
 
   //日付表示
    const dateText =  document.createElement('div');

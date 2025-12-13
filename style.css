@@ -4,6 +4,12 @@
 * {
   outline: solid 1px red;
 }
+.spaceS {
+  margin: 10px 0 0;
+}
+.spaceM {
+  margin: 20px 0 0;
+}
 input {
   width: 200px;
   height: 3em;
