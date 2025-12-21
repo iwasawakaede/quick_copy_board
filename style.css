@@ -166,15 +166,6 @@ button {
 .selectbox-2 select:focus {
   outline: 1px solid #90AFC5;
 }
-#up {
-  font-size: 17px;
-  width: 95%;
-  min-height: 150px;
-  height: auto;
-  padding: 5px;
-  resize: vertical;
-}
-
 .cancelBtn {
   background: #763626;
   width: 110px;
@@ -223,13 +214,7 @@ button {
   padding: 5px;
   margin: 0;
 }
-textarea.inputOpen.is-text-open {
-  height: 100px !important;
-  min-height: 200px;
-  overflow-y: auto;
-  background: #90AFC5;
-}
-#up.inputOpen, #up2.inputOpen {
+.inputOpen {
   font-size: 17px;
   width: 95%;
   height: 2.5em;
@@ -237,6 +222,18 @@ textarea.inputOpen.is-text-open {
   transition: height 0.3s ease;
   resize: none;
   display: block;
-  overflow-y: hibben;
-  background: red;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+textarea.inputOpen.is-text-open {
+  height: 150px !important;
+  overflow-y: auto;
+}
+p.inputOpen {
+  height: auto;
+  min-height: 2.5em;
+  background: transparent;
+  border: none;
 }

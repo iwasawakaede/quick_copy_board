@@ -194,41 +194,62 @@ copyBtn.classList.add('btnSize','copyBtnSize');
   longStr.textContent = "詳細を表示する";
 
    //詳細ボタンイベント
-  longStr.addEventListener('click', function(){
-    console.log('詳細ボタン押下！');
-    const inputText = snippet.text;
-    console.log(inputText);
-    strElement.classList.toggle('is-open');
-    const upArea = document.getElementById('up');
-    console.log(updateBtn.textContent);
+    longStr.addEventListener('click', function () {
+      strElement.classList.toggle('is-open');
+      const upArea = document.getElementById('up');
 
-  if (upClick && upArea){
-      upArea.classList.toggle('is-text-open');
-      console.log('更新エリアはあるよ！');
-     if (upArea.classList.contains('is-text-open')){
-      //入力欄
-      strElement.innerHTML = `${i+1}:<textarea id='up' class='inputOpen'>${inputText}</textarea>`;
-      longStr.textContent = '▲▲ 編集エリアを閉じる';
-     } else {
-      strElement.innerHTML = `${i+1}:<input type="text" class="inputOpen" value="${inputText}"></input>`;
-      longStr.textContent = '▼ 編集エリアを表示';
-      console.log(strElement.className);
-     }
-    } else {
-      console.log('更新エリアはないよ！');
-     const inputText = snippet.text;
-     if (strElement.classList.contains('is-open')){
-      //入力欄
-      strElement.innerHTML = `${i+1}:<p id='up2' class='inputOpen'>${inputText}</p>`;
-      longStr.textContent = '▲▲ 詳細を閉じる';
-     } else {
-      strElement.classList.add('inputOpen');
-      strElement.innerHTML = `${i+1}:${inputText}`;
-      longStr.textContent = '▼ 詳細を表示';
-     }
-      //upClick == false;
-      readFlg == true;
-    }
+      if (upClick && upArea) {
+        // upArea.classList.toggle('is-text-open');
+        if (strElement.classList.contains('is-open')) {
+          upArea.classList.add('is-text-open');
+          longStr.textContent = '▲▲ 編集エリアを閉じる';
+        } else {
+          upArea.classList.remove('is-text-open');
+          longStr.textContent = '▼ 編集エリアを表示';
+        }
+      } else {
+        const inputText = snippet.text;
+        if (strElement.classList.contains('is-open')) {
+          strElement.innerHTML = `<span id="nm">${j}: </span><p id='up2' class='inputOpen'>${inputText}</p>`;
+          longStr.innerHTML = '▲▲ 詳細を閉じる';
+        } else {
+          strElement.innerHTML = `<span id="nm">${j}: </span>${inputText}`;
+          longStr.textContent = '▼ 詳細を表示';
+        }
+       }
+  //   console.log('詳細ボタン押下！');
+  //   const inputText = snippet.text;
+  //   console.log(inputText);
+  //   strElement.classList.toggle('is-open');
+  //   const upArea = document.getElementById('up');
+  //   console.log(updateBtn.textContent);
+
+  // if (upClick && upArea){
+  //     upArea.classList.toggle('is-text-open');
+  //     console.log('更新エリアはあるよ！');
+  //    if (upArea.classList.contains('is-text-open')){
+  //     //入力欄
+  //     strElement.innerHTML = `${i+1}:<textarea id='up' class='inputOpen'>${inputText}</textarea>`;
+  //     longStr.textContent = '▲▲ 編集エリアを閉じる';
+  //    } else {
+  //     strElement.innerHTML = `${i+1}:<input type="text" class="inputOpen" value="${inputText}"></input>`;
+  //     longStr.textContent = '▼ 編集エリアを表示';
+  //     console.log(strElement.className);
+  //    }
+  //   } else {
+  //     console.log('更新エリアはないよ！');
+  //    const inputText = snippet.text;
+  //    if (strElement.classList.contains('is-open')){
+  //     //入力欄
+  //     strElement.innerHTML = `${i+1}:<p id='up2' class='inputOpen'>${inputText}</p>`;
+  //     longStr.textContent = '▲▲ 詳細を閉じる';
+  //    } else {
+  //     strElement.classList.add('inputOpen');
+  //     strElement.innerHTML = `${i+1}:${inputText}`;
+  //     longStr.textContent = '▼ 詳細を表示';
+  //    }
+  //     //upClick == false;
+  //     readFlg == true;
   });
 
    listBox.appendChild(strElement);
@@ -257,27 +278,18 @@ copyBtn.classList.add('btnSize','copyBtnSize');
    updateBtn.addEventListener('click', function (){
     if (updateBtn.textContent === '編集'){
      const inputText = snippet.text;
-     console.log(inputText);
      updateBtn.textContent = "更新";
-     clickFlg = true;
-     upClick = true;
+      upClick = true;
 
-     //strElement.innerHTML = `${i+1}:<textarea class="inputOpen">${inputText}</textarea>`;
-
-     strElement.innerHTML = `${i+1}:<textarea id='up' class='inputOpen'>${inputText}</textarea>`;
-
-     const upArea = document.getElementById('up');
-
+      strElement.innerHTML = `<span id="nm">${j}: </span><textarea id='up' class='inputOpen'>${inputText}</textarea>`;
+      const upArea = document.getElementById('up');
    if (strElement.classList.contains('is-open')){
      upArea.classList.add('is-text-open');
      longStr.textContent = '▲▲ 編集エリアを閉じる';
    } else {
+      upArea.classList.remove('is-text-open');
       longStr.textContent = '▼ 編集エリアを表示';
    }
-     console.log(inputText);
-     let before = j-1;
-     console.log(before);
-
      //キャンセルボタン追加
      let cancelBtn = document.createElement('button');
      cancelBtn.classList.add('cancelBtn');
@@ -286,15 +298,52 @@ copyBtn.classList.add('btnSize','copyBtnSize');
      //キャンセルボタン押下
      cancelBtn.addEventListener('click', function(){
        updateBtn.textContent = "編集";
+       upClick = false;
        textOpen(textArr);
           });
     } else {
      //編集後に更新
-     const inputText = document.getElementById('up').value;
-     updateClick(i, inputText);
-     console.log('更新するよ！');
-     clickFlg = false;
+      const upArea = document.getElementById('up');
+      if (upArea) {
+        updateClick(i, upArea.value);
+        console.log('更新するよ！');
+        upClick = false;
+       }
     }
+
+  //    const inputText = snippet.text;
+  //    console.log(inputText);
+  //    updateBtn.textContent = "更新";
+  //    clickFlg = true;
+  //    upClick = true;
+  //    strElement.innerHTML = `${i+1}:<textarea id='up' class='inputOpen'>${inputText}</textarea>`;
+  //    const upArea = document.getElementById('up');
+  //  if (strElement.classList.contains('is-open')){
+  //    upArea.classList.add('is-text-open');
+  //    longStr.textContent = '▲▲ 編集エリアを閉じる';
+  //  } else {
+  //     longStr.textContent = '▼ 編集エリアを表示';
+  //  }
+  //    console.log(inputText);
+  //    let before = j-1;
+  //    console.log(before);
+  //    //キャンセルボタン追加
+  //    let cancelBtn = document.createElement('button');
+  //    cancelBtn.classList.add('cancelBtn');
+  //    cancelBtn.textContent = "キャンセル";
+  //    updateBtn.after(cancelBtn);
+  //    //キャンセルボタン押下
+  //    cancelBtn.addEventListener('click', function(){
+  //      updateBtn.textContent = "編集";
+  //      textOpen(textArr);
+  //         });
+  //   } else {
+  //    //編集後に更新
+  //    const inputText = document.getElementById('up').value;
+  //    updateClick(i, inputText);
+  //    console.log('更新するよ！');
+  //    clickFlg = false;
+  //   }
    });
    j++;
   }
@@ -351,20 +400,20 @@ function dateSortChange(e){
    if (selectValue === 'asc'){
    console.log('ここからは昇順');
    //登録日付で並べ替え
-　 let sortAsc = textArr.sort((a,b) => (a.created < b.created ? -1 : 1));
+  let sortAsc = textArr.sort((a,b) => (a.created < b.created ? -1 : 1));
    console.log('並べ替えた結果' + sortAsc[1].text);
    } else if (selectValue === 'desc') {
    console.log('ここからは降順');
-　 let sortAsc = textArr.sort((a,b) => (a.created > b.created ? -1 : 1));
+  let sortAsc = textArr.sort((a,b) => (a.created > b.created ? -1 : 1));
    console.log('並べ替えた結果' + sortAsc[1].text);
    //更新日付で並べ替え
    } else if (selectValue === 'asc-u') {
    console.log('ここからは更新昇順');
-　 let sortAsc = textArr.sort((a,b) => (a.updated < b.updated ? -1 : 1));
+   let sortAsc = textArr.sort((a,b) => (a.updated < b.updated ? -1 : 1));
    console.log('並べ替えた結果' + sortAsc[1].text);
    } else if (selectValue === 'desc-u') {
    console.log('ここからは更新降順');
-　 let sortAsc = textArr.sort((a,b) => (a.updated > b.updated ? -1 : 1));
+   let sortAsc = textArr.sort((a,b) => (a.updated > b.updated ? -1 : 1));
    console.log('並べ替えた結果' + sortAsc[1].text);
    } else {
      return;
