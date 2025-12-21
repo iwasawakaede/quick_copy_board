@@ -9,22 +9,60 @@
 </head>
 <body>
   <h1>クイックコピーボード</h1>
-  <div class="spaceS">
+  <div class="boxM posMain">
     <div>
       <p>・検索ワードを入力して下さい。</p>
     </div>
-    <form method="post">
+    <div class="inputBox posLeft">
+     <form method="post">
       <input type="text" id="hit"></input>
+     </form>
+     <label class="selectbox-2">
+      <select name="category" id="cate">
+       <option value="">選択</option>
+       <option value="work">仕事</option>
+       <option value="hoby">趣味</option>
+       <option value="study">学び</option>
+      </select>
+     </label>
+     <div class="btnBox">
       <button id="search">検索</button>
-    </form>
+      <button id="show-all" class="showBtn">全て表示</button>
+      <button id="clear-all" class="showBtn">全件削除</button>
+     </div>
+    </div>
   </div>
-  <div class="inputBox">
-    <form method="post" class="spaceM">
+ <div class="boxM topM">
+  <div>
+    <p>・登録したいワードを入力し、<br>&nbsp;&nbsp;&nbsp;カテゴリーを選択して<br>&nbsp;&nbsp;&nbsp;保存ボタンを押して下さい。</p>
+  </div>
+  <div class="inputBox posLeft">
+    <form method="post">
       <input type="text" id="text"></input>
     </form>
+    <label class="selectbox-2">
+      <select name="category" id="cate2">
+       <option value="">選択</option>
+       <option value="work">仕事</option>
+       <option value="hoby">趣味</option>
+       <option value="study">学び</option>
+      </select>
+    </label>
     <button id="click" value="saved">保存</button>
   </div>
-  <div id="container" class="box"></div>
+ <div class="bottomS">
+   <label class="selectbox-2">
+    <select name="date" id="dateSort">
+     <option value="">並び替え</option>
+     <option value="desc">登録日が新しい順</option>
+     <option value="asc">登録日が古い順</option>
+     <option value="desc-u">更新日が新しい順</option>
+     <option value="asc-u">更新日が古い順</option>
+    </select>
+   </label>
+ </div>
+ </div>
+  <div id="container"></div>
   <script src="script.js"></script>
 </body>
 </html>
