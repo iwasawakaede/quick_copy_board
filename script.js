@@ -1,3 +1,4 @@
+
 //変数定義
 const textBox = document.getElementById('text');
 const save = document.getElementById('click');
@@ -22,6 +23,10 @@ let upClick = false;
 let readFlg = false;
 let cntFlg = false;
 let favoriteFlg = false;
+let strLength = 0;
+let shortStr = '';
+let strArr = [];
+let ti = '';
 
 //初期化
 function init(){
@@ -137,6 +142,13 @@ function textOpen(arr){
    const snippet = arr[i];
    const selWord = snippet.category;
 
+   //リセット
+   shortStr = '';
+   strLength = 0;
+
+   strLength = snippet.text.length;
+   console.log(i + '番目:' + strLength);
+
    let listBox = document.createElement('div');
    listBox.classList.add('box','middleB');
    const strElement =  document.createElement('div');
@@ -159,7 +171,21 @@ function textOpen(arr){
   //テキスト
   const textSpan = document.createElement('span');
   textSpan.className = 'main-text';
-  textSpan.textContent = snippet.text;
+
+  //全角15文字より多い場合は「…」で表示する
+  if (strLength > 15){
+    shortStr = snippet.text.substr(0, 13) + '…';
+    textSpan.textContent = shortStr;
+    console.log(i + ':' + textSpan.textContent);
+  } else if (strLength >= 1){
+    textSpan.textContent = snippet.text;
+  } else {
+    shortStr = '';
+  }
+  //文字用の配列を追加
+  strArr.splice(i, 1, shortStr);
+  console.log('配列の再配列: ' + strArr[i]);
+  console.log('再配列後の配列は: ' + strArr);
 
   if (snippet.flg){
     strElement.appendChild(favoMark);
@@ -259,7 +285,16 @@ copyBtn.classList.add('btnSize','copyBtnSize');
         strElement.style.display = "flex";
 　　　　　longStr.innerHTML = '▲▲ 詳細を閉じる';
         } else {
-        const t = document.createTextNode(inputText);
+
+        //全角15文字より多い場合の表示
+         if (snippet.text.length > 15){
+          ti = snippet.text.substr(0, 13) + '…';
+     console.log('表示されたのは' + ti);
+         } else {
+          ti = inputText;
+          console.log('セットするのは' + ti);
+         }
+        const t = document.createTextNode(ti);
         strElement.appendChild(t);
         strElement.style.fontSize = "20px";
         longStr.textContent = '▼ 詳細を表示';
@@ -482,6 +517,7 @@ function dateSortChange(e){
 }
 
 init(textArr);
+strArr = [];
 //localStorage.clear();
 
 //PCのレイアウト追加←これはあとでもおっけ
