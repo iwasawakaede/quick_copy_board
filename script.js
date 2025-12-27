@@ -20,7 +20,8 @@ let selWord = '';
 let categoryText = '';
 let upClick = false;
 let readFlg = false;
-//let cnt = 0;
+let cntFlg = false;
+let favoriteFlg = false;
 
 //初期化
 function init(){
@@ -110,7 +111,8 @@ function saveStorage(){
     text: inputText,
     created: now,
     updated: now,
-    category: selWord
+    category: selWord,
+    flg: false
   };
 
   console.log('inputの値' + inputText);
@@ -138,8 +140,34 @@ function textOpen(arr){
    let listBox = document.createElement('div');
    listBox.classList.add('box','middleB');
    const strElement =  document.createElement('div');
-   strElement.innerHTML = '<span id="nm">' + j + ': </span>'+ snippet.text;
-   strElement.classList.add('spaceS', 'snippet-content');
+   strElement.classList.add('spaceS', 'snippet-content','main-text');
+
+  const favoMark = document.createElement('span');
+  //お気に入りの表示
+  if (snippet.flg) {
+    favoMark.classList.add('pinBtnSize');
+    favoMark.textContent = "🌟";
+  } else {
+    favoMark.textContent = "";
+  }
+
+  //要素表示可能にするための変更
+  const numSpan = document.createElement('span');
+  numSpan.id = 'nm';
+  numSpan.textContent = (i+1) + ':';
+
+  //テキスト
+  const textSpan = document.createElement('span');
+  textSpan.className = 'main-text';
+  textSpan.textContent = snippet.text;
+
+  if (snippet.flg){
+    strElement.appendChild(favoMark);
+  } else {
+    favoMark.remove();
+  }
+  strElement.appendChild(numSpan);
+  strElement.appendChild(textSpan);
 
   //カテゴリー表示
   const categoryElement = document.createElement('span');
@@ -153,12 +181,14 @@ function textOpen(arr){
     case 'study':
      categoryText = '学び';
      break;
+    case 'coding':
+     categoryText = 'コーディング';
+     break;
     case '':
      categoryText = 'なし';
      break;
   }
   categoryElement.textContent = '分類:' + categoryText;
-   //console.log(selWord.value);
 
   //日付表示
    const dateText =  document.createElement('div');
@@ -176,6 +206,10 @@ function textOpen(arr){
   }
 
   dateText.textContent = dateOutput;
+
+  let favoriteBtn = document.createElement('button');
+favoriteBtn.classList.add('btnSize','pinBtnSize');
+  favoriteBtn.textContent = "🌟:お気に入り";
 
   let copyBtn = document.createElement('button');
 copyBtn.classList.add('btnSize','copyBtnSize');
@@ -199,7 +233,6 @@ copyBtn.classList.add('btnSize','copyBtnSize');
       const upArea = document.getElementById('up');
 
       if (upClick && upArea) {
-        // upArea.classList.toggle('is-text-open');
         if (strElement.classList.contains('is-open')) {
           upArea.classList.add('is-text-open');
           longStr.textContent = '▲▲ 編集エリアを閉じる';
@@ -209,64 +242,68 @@ copyBtn.classList.add('btnSize','copyBtnSize');
         }
       } else {
         const inputText = snippet.text;
+        strElement.innerHTML = '';
+        const newNum = document.createElement('span');
+        newNum.id = 'nm';
+        newNum.textContent = (i+1) + ': ';
+        strElement.appendChild(newNum);
+
         if (strElement.classList.contains('is-open')) {
-          strElement.innerHTML = `<span id="nm">${j}: </span><p id='up2' class='inputOpen'>${inputText}</p>`;
-          longStr.innerHTML = '▲▲ 詳細を閉じる';
+
+        const p = document.createElement('p');
+        p.id = 'up2';
+        p.className = 'inputOpen';
+        p.textContent = inputText;
+        strElement.appendChild(p);
+        p.style.fontSize = "20px";
+        strElement.style.display = "flex";
+　　　　　longStr.innerHTML = '▲▲ 詳細を閉じる';
         } else {
-          strElement.innerHTML = `<span id="nm">${j}: </span>${inputText}`;
-          longStr.textContent = '▼ 詳細を表示';
+        const t = document.createTextNode(inputText);
+        strElement.appendChild(t);
+        strElement.style.fontSize = "20px";
+        longStr.textContent = '▼ 詳細を表示';
         }
        }
-  //   console.log('詳細ボタン押下！');
-  //   const inputText = snippet.text;
-  //   console.log(inputText);
-  //   strElement.classList.toggle('is-open');
-  //   const upArea = document.getElementById('up');
-  //   console.log(updateBtn.textContent);
-
-  // if (upClick && upArea){
-  //     upArea.classList.toggle('is-text-open');
-  //     console.log('更新エリアはあるよ！');
-  //    if (upArea.classList.contains('is-text-open')){
-  //     //入力欄
-  //     strElement.innerHTML = `${i+1}:<textarea id='up' class='inputOpen'>${inputText}</textarea>`;
-  //     longStr.textContent = '▲▲ 編集エリアを閉じる';
-  //    } else {
-  //     strElement.innerHTML = `${i+1}:<input type="text" class="inputOpen" value="${inputText}"></input>`;
-  //     longStr.textContent = '▼ 編集エリアを表示';
-  //     console.log(strElement.className);
-  //    }
-  //   } else {
-  //     console.log('更新エリアはないよ！');
-  //    const inputText = snippet.text;
-  //    if (strElement.classList.contains('is-open')){
-  //     //入力欄
-  //     strElement.innerHTML = `${i+1}:<p id='up2' class='inputOpen'>${inputText}</p>`;
-  //     longStr.textContent = '▲▲ 詳細を閉じる';
-  //    } else {
-  //     strElement.classList.add('inputOpen');
-  //     strElement.innerHTML = `${i+1}:${inputText}`;
-  //     longStr.textContent = '▼ 詳細を表示';
-  //    }
-  //     //upClick == false;
-  //     readFlg == true;
   });
+
+   // ボタンをまとめるコンテナを作成
+   let btnGroup = document.createElement('div');
+   btnGroup.classList.add('btnGroup');
 
    listBox.appendChild(strElement);
    listBox.appendChild(longStr);
+   listBox.appendChild(favoriteBtn);
    listBox.appendChild(copyBtn);
    listBox.appendChild(deleteBtn);
    listBox.appendChild(updateBtn);
+   //ボタンまとめ用のコンテナ、今はやらない
+   listBox.appendChild(btnGroup);
+
    listBox.appendChild(categoryElement);
    listBox.appendChild(dateText);
    contenerBox.appendChild(listBox);
+
+   //お気に入り機能
+   favoriteBtn.addEventListener('click', function (){
+     console.log('お気に入りボタン押下！');
+     console.log('元々のフラグが ' + snippet.flg + ' 、' + '押したら' + cntFlg + ' になった！');
+     if (snippet.flg === cntFlg){
+       if (cntFlg) {
+         cntFlg = false;
+       } else {
+         cntFlg = true;
+       }
+     }
+     favoAdd(i, cntFlg);
+   });
 
    //コピペボタン
    copyBtn.addEventListener('click', function(){
     //コピペボタン押下
       console.log('コピペボタン押下！');
       const inputText = snippet.text;
-      copyClick(i, inputText);
+      copyClick(i, inputText, copyBtn);
       console.log(inputText);
     }
    );
@@ -279,15 +316,25 @@ copyBtn.classList.add('btnSize','copyBtnSize');
     if (updateBtn.textContent === '編集'){
      const inputText = snippet.text;
      updateBtn.textContent = "更新";
-      upClick = true;
+     upClick = true;
 
-      strElement.innerHTML = `<span id="nm">${j}: </span><textarea id='up' class='inputOpen'>${inputText}</textarea>`;
-      const upArea = document.getElementById('up');
+      strElement.innerHTML = '';
+      const n = document.createElement('span');
+      n.id = 'nm';
+      n.textContent = (i+1) + ': ';
+      strElement.appendChild(n);
+
+      const tea = document.createElement('textarea');
+      tea.id = 'up';
+      tea.className = 'inputOpen';
+      tea.value = snippet.text;
+      strElement.appendChild(tea);
+
    if (strElement.classList.contains('is-open')){
-     upArea.classList.add('is-text-open');
+     tea.classList.add('is-text-open');
      longStr.textContent = '▲▲ 編集エリアを閉じる';
    } else {
-      upArea.classList.remove('is-text-open');
+      tea.classList.remove('is-text-open');
       longStr.textContent = '▼ 編集エリアを表示';
    }
      //キャンセルボタン追加
@@ -310,60 +357,60 @@ copyBtn.classList.add('btnSize','copyBtnSize');
         upClick = false;
        }
     }
-
-  //    const inputText = snippet.text;
-  //    console.log(inputText);
-  //    updateBtn.textContent = "更新";
-  //    clickFlg = true;
-  //    upClick = true;
-  //    strElement.innerHTML = `${i+1}:<textarea id='up' class='inputOpen'>${inputText}</textarea>`;
-  //    const upArea = document.getElementById('up');
-  //  if (strElement.classList.contains('is-open')){
-  //    upArea.classList.add('is-text-open');
-  //    longStr.textContent = '▲▲ 編集エリアを閉じる';
-  //  } else {
-  //     longStr.textContent = '▼ 編集エリアを表示';
-  //  }
-  //    console.log(inputText);
-  //    let before = j-1;
-  //    console.log(before);
-  //    //キャンセルボタン追加
-  //    let cancelBtn = document.createElement('button');
-  //    cancelBtn.classList.add('cancelBtn');
-  //    cancelBtn.textContent = "キャンセル";
-  //    updateBtn.after(cancelBtn);
-  //    //キャンセルボタン押下
-  //    cancelBtn.addEventListener('click', function(){
-  //      updateBtn.textContent = "編集";
-  //      textOpen(textArr);
-  //         });
-  //   } else {
-  //    //編集後に更新
-  //    const inputText = document.getElementById('up').value;
-  //    updateClick(i, inputText);
-  //    console.log('更新するよ！');
-  //    clickFlg = false;
-  //   }
    });
    j++;
   }
 }
 
+//お気に入り追加
+function favoAdd(index, flg){
+  console.log('フラグは ' + flg + ' !');
+  const oldSnippet = textArr[index];
+  const updatesnippets = {
+          text: oldSnippet.text,
+          created: oldSnippet.created,
+          updated: oldSnippet.updated,
+          category: oldSnippet.category,
+          flg: flg
+  };
+
+  //お気に入り追加後
+  textArr.splice(index, 1, updatesnippets);
+
+  //お気に入り並び替え
+  const sortedArr = textArr.sort((a, b) => {
+    if (a.flg === b.flg){
+      return b.created - a.created;
+    }
+    return a.flg ? -1 : 1;
+  });
+
+  localStorage.setItem('snippets', JSON.stringify(textArr));
+  console.log('お気に入りを追加するよ！');
+  textOpen(textArr);
+  //console.log(textArr);
+}
+
 //コピペ
-function copyClick(index, text){
+function copyClick(index, text, element){
   console.log(index, text);
-   navigator.clipboard.writeText(text).then(success, faild);
+  const btnText = element.textContent;
+  console.log('ボタンは' + btnText);
+  navigator.clipboard.writeText(text).then(success, faild);
   function success(){
     console.log('コピー完了！');
-    alert('「' + text + '」 をコピーしました！');
+    element.style.backgroundColor = "#4CAF50";
+    element.textContent = '完了！';
+    setTimeout(() => {
+      element.style.backgroundColor = "";
+      element.textContent = btnText;
+    }, 1500);
   }
   function faild(){
     console.log('コピー失敗、、、');
     alert('コピー失敗！');
   }
 }
-
-//詳細表示ボタン
 
 //削除機能
 function deleteClick(index){
@@ -380,7 +427,8 @@ function updateClick(index, text){
     text: text,
     created: oldSnippet.created,
     updated: Date.now(),
-    category: oldSnippet.category
+    category: oldSnippet.category,
+    flg: oldSnippet.flg
   };
 
   //編集完了後
@@ -415,6 +463,16 @@ function dateSortChange(e){
    console.log('ここからは更新降順');
    let sortAsc = textArr.sort((a,b) => (a.updated > b.updated ? -1 : 1));
    console.log('並べ替えた結果' + sortAsc[1].text);
+   } else if(selectValue === 'asc-f') {
+   console.log('ここからはお気に入り順');
+   let sortAsc = textArr.sort((a,b) => {
+    if (a.flg !== b.flg){
+      return a.flg ? -1 : 1;
+    } else if (a.flg === b.flg) {
+      return a.created > b.created ? -1 : 1;
+    }
+   });
+   console.log('並べ替えた結果' + sortAsc[1].text);
    } else {
      return;
    }
@@ -425,10 +483,5 @@ function dateSortChange(e){
 
 init(textArr);
 //localStorage.clear();
-//詳細ボタン押下した状態での更新
-//詳細ボタンのみ押した場合→伸びるだけ
-//編集→詳細はテキストエリアが伸びる
-//詳細→編集はテキストエリアになる
-//並び替え見た目
-//分類にコーディングを追加
-//長文の対応(レイアウトの変更)
+
+//PCのレイアウト追加←これはあとでもおっけ
