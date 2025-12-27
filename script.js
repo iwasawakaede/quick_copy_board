@@ -282,8 +282,8 @@ copyBtn.classList.add('btnSize','copyBtnSize');
         p.textContent = inputText;
         strElement.appendChild(p);
         p.style.fontSize = "20px";
-        strElement.style.display = "flex";
-　　　　　longStr.innerHTML = '▲▲ 詳細を閉じる';
+          strElement.style.display = "flex";
+          longStr.innerHTML = '▲▲ 詳細を閉じる';
         } else {
 
         //全角15文字より多い場合の表示
