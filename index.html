@@ -67,7 +67,72 @@
     </div>
    </div>
   </div>
-  <div id="container"></div>
+  <!-- <div id="container"></div> -->
+
+<!-- TEST FireBase -->
+  <div>
+    <div>テスト：<input type="text" id="js-title"></div>
+    <div>
+      <textarea name="f-html" id="js-html"></textarea>
+      <button id="send">送信</button>
+    </div>
+    <div id="output" style="overflow: auto;height: 300px;"></div>
+  </div>
   <script src="script.js"></script>
+
+<!-- FireBase(サーバーサイドの処理) -->
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved }
+  from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDAIMUKQm6Qv7wVh35GrA4pJwk9aYLz5dY",
+    authDomain: "snippetapp-a3018.firebaseapp.com",
+    projectId: "snippetapp-a3018",
+    storageBucket: "snippetapp-a3018.firebasestorage.app",
+    messagingSenderId: "670984465748",
+    appId: "1:670984465748:web:01be39a4b0a9d376feacc1"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  //データベース接続
+  const db = getDatabase(app);
+  //データを登録する階層を指定する
+  const dbRef = ref(db, "code/d_html");
+
+  //データの送信機能
+  const inBtn = document.getElementById('send');
+  inBtn.addEventListener('click', function () {
+  const title = document.getElementById('js-title');
+  const cHtml = document.getElementById('js-html');
+  ///入力値をオブジェクト変数にセット
+  const msg = {
+    oTitle: title.value,
+    oCHtml: cHtml.value
+  }
+
+  //テーブルに登録
+  //1:ユニークキーを登録
+  //2:テーブルに登録したい各フィールド登録する
+  const newPostRef = push(dbRef);
+  set(newPostRef, msg);
+  console.log(newPostRef);
+});
+  //データを画面に表示
+  onChildAdded(dbRef, function (data){
+    const msg = data.val();
+    const outText = document.getElementById('output');
+    outText.innerHTML = `<p>タイトルは、${msg.oTitle} で、<br> コードは、${msg.oCHtml} を登録しました。</p>`;
+    console.log(outText.textContent);
+  });
+
+</script>
+
 </body>
 </html>
